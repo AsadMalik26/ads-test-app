@@ -23,6 +23,11 @@ export default function Ads({ navigation }) {
         component={RewardedAdScreen}
         options={{ title: "Rewarded Ad" }}
       />
+      <Stack.Screen
+        name="RewardedInterstitialScreen"
+        component={RewardedInterstitialScreen}
+        options={{ title: "Rewarded Interstitial Ad" }}
+      />
     </Stack.Navigator>
   );
 }
@@ -47,17 +52,24 @@ function Home({ navigation }) {
       >
         <Text>Rewarded Ad</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("RewardedInterstitialScreen")}
+      >
+        <Text>Rewarded Interstitial Ad</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 import {
+  RewardedAd,
+  RewardedInterstitialAd,
+  RewardedAdEventType,
   BannerAd,
   BannerAdSize,
   TestIds,
   InterstitialAd,
   AdEventType,
-  RewardedAd,
-  RewardedAdEventType,
 } from "react-native-google-mobile-ads";
 import { TouchableOpacity } from "react-native-gesture-handler";
 const adUnitId = __DEV__
@@ -139,23 +151,23 @@ function InterstitialAdScreen({ navigation }) {
   );
 }
 
-const rewardedAdUnitId = __DEV__
-  ? TestIds.REWARDED
-  : "ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy";
-
-const rewarded = RewardedAd.createForAdRequest(rewardedAdUnitId, {
+// const rewardedAdUnitId = __DEV__
+//   ? TestIds.REWARDED
+//   : "ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy";
+const rewardedAdUnitId = "ca-app-pub-3694130726471262/2732380676";
+const rewarded = RewardedAd.createForAdRequest(TestIds.REWARDED, {
   requestNonPersonalizedAdsOnly: true,
   keywords: ["fashion", "clothing"],
 });
+
 function RewardedAdScreen({ navigation }) {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    console.log("Loading Rewareded Ad");
     const unsubscribeLoaded = rewarded.addAdEventListener(
       RewardedAdEventType.LOADED,
       () => {
         console.log("loaded Add event rewareded ad");
-        rewarded.show();
+        // rewarded.show();
         setLoaded(true);
       }
     );
@@ -165,21 +177,19 @@ function RewardedAdScreen({ navigation }) {
         console.log("User earned reward of ", reward);
       }
     );
-
     // Start loading the rewarded ad straight away
     console.log("Loading rewareded");
     rewarded.load();
-
     // Unsubscribe from events on unmount
     return () => {
-      console.log("Unmount rewareded ad event");
       unsubscribeLoaded();
       unsubscribeEarned();
+      console.log("Unmount rewareded ad event");
     };
   }, []);
-  //   if (!loaded) {
-  //     return null;
-  //   }
+  if (!loaded) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
@@ -191,20 +201,84 @@ function RewardedAdScreen({ navigation }) {
         }}
       />
 
-      <Button
-        title="Show rewarded"
-        onPress={() => {
-          try {
+      {loaded && (
+        <Button
+          title="Show rewarded"
+          onPress={() => {
+            // try {
+            //   rewarded.show();
+            // } catch (error) {
+            //   console.log(
+            //     "Error rewareded because you are showing it without loading, ",
+            //     error.message
+            //   );
+            // }
             rewarded.show();
-          } catch (error) {
-            console.log(
-              "Error rewareded because you are showing it without loading, ",
-              error.message
-            );
-          }
-        }}
-      />
+          }}
+        />
+      )}
     </View>
+  );
+}
+
+const rewardedInterstitialAdUnitId = __DEV__
+  ? TestIds.REWARDED_INTERSTITIAL
+  : "ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy";
+
+const rewardedInterstitial = RewardedInterstitialAd.createForAdRequest(
+  rewardedInterstitialAdUnitId
+  // {
+  //   requestNonPersonalizedAdsOnly: true,
+  //   keywords: ["fashion", "clothing"],
+  // }
+);
+
+function RewardedInterstitialScreen({ navigation }) {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    console.log("RewardedInterstitialScreen Loading");
+
+    const unsubscribeLoaded = rewardedInterstitial.addAdEventListener(
+      RewardedAdEventType.LOADED,
+      () => {
+        console.log("RewardedInterstitialScreen Loaded");
+        setLoaded(true);
+      }
+    );
+    const unsubscribeEarned = rewardedInterstitial.addAdEventListener(
+      RewardedAdEventType.EARNED_REWARD,
+      (reward) => {
+        console.log("User earned reward of ", reward);
+      }
+    );
+
+    // Start loading the rewarded interstitial ad straight away
+    rewardedInterstitial.load();
+
+    // Unsubscribe from events on unmount
+    return () => {
+      unsubscribeLoaded();
+      unsubscribeEarned();
+      console.log("RewardedInterstitialScreen unmount");
+    };
+  }, []);
+  useEffect(() => {
+    console.log("RewardedInterstitialScreen", RewardedAdEventType.LOADED);
+  });
+
+  // No advert ready to show yet
+  if (!loaded) {
+    return null;
+  }
+
+  return (
+    <Button
+      title="Show Rewarded Interstitial Ad"
+      onPress={() => {
+        rewardedInterstitial.show();
+      }}
+    />
   );
 }
 

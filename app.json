@@ -25,7 +25,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.asadm26.adstestapp"
+      "package": "com.asadm26.adstestapp" 
     },
     "web": {
       "favicon": "./assets/favicon.png"
