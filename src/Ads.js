@@ -1,8 +1,18 @@
 const Stack = createStackNavigator();
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
+import {
+  RewardedAd,
+  RewardedInterstitialAd,
+  RewardedAdEventType,
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+  InterstitialAd,
+  AdEventType,
+} from "react-native-google-mobile-ads";
 
 export default function Ads({ navigation }) {
   return (
@@ -61,17 +71,7 @@ function Home({ navigation }) {
     </View>
   );
 }
-import {
-  RewardedAd,
-  RewardedInterstitialAd,
-  RewardedAdEventType,
-  BannerAd,
-  BannerAdSize,
-  TestIds,
-  InterstitialAd,
-  AdEventType,
-} from "react-native-google-mobile-ads";
-import { TouchableOpacity } from "react-native-gesture-handler";
+
 const adUnitId = __DEV__
   ? TestIds.BANNER
   : "ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy";

@@ -34,7 +34,20 @@
       "eas": {
         "projectId": "f291208b-2d5f-4152-8ea6-2f2ab4f1e186"
       }
-    }
+    },
+    "facebookScheme": "fb1234567891234567",
+    "facebookAppId": " 535255298295565",
+    "facebookDisplayName": "FB_AN",
+    "facebookAutoLogAppEventsEnabled": true,
+    "facebookAdvertiserIDCollectionEnabled": true,
+    "plugins": [
+      [
+        "expo-ads-facebook",
+        {
+          "userTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+        }
+      ]
+    ]
   },
   "react-native-google-mobile-ads": {
     "android_app_id": "ca-app-pub-3694130726471262~2460261397"
